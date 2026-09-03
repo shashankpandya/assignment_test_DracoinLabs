@@ -108,17 +108,17 @@ const logout = async (refreshToken) => {
 };
 
 const getNewAccessAndCsrfToken = async (refreshToken) => {
+  const decodedToken = verifyToken(
+    refreshToken,
+    env.JWT_REFRESH_TOKEN_SECRET
+  );
+  if (!decodedToken || !decodedToken.id) {
+    throw new ApiError(401, "Invalid refresh token");
+  }
+
   const client = await db.connect();
   try {
     await client.query("BEGIN");
-
-    const decodedToken = verifyToken(
-      refreshToken,
-      env.JWT_REFRESH_TOKEN_SECRET
-    );
-    if (!decodedToken || !decodedToken.id) {
-      throw new ApiError(401, "Invalid refresh token");
-    }
 
     const user = await findUserByRefreshToken(refreshToken);
     if (!user) {
