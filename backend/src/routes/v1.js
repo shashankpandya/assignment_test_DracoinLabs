@@ -16,11 +16,9 @@ const { sectionRoutes } = require("../modules/sections/section-router.js");
 const { departmentRoutes } = require("../modules/departments/department-router.js");
 const { handleGetDashboardData } = require("../modules/dashboard/dashboard-controller.js");
 const { accessControlRoutes } = require("../modules/access-control/access-control-router.js");
-const { handleGetMyAccessControl } = require("../modules/access-control/access-control-controller.js");
 
 router.get("/teachers", authenticateToken, csrfProtection, checkApiAccess, handleGetAllTeachers);
 router.get("/dashboard", authenticateToken, csrfProtection, checkApiAccess, handleGetDashboardData);
-router.get("/access-controls/me", authenticateToken, csrfProtection, handleGetMyAccessControl);
 router.use("/access-controls", authenticateToken, csrfProtection, accessControlRoutes);
 router.use("/auth", authRoutes);
 router.use("/account", authenticateToken, csrfProtection, accountRoutes);

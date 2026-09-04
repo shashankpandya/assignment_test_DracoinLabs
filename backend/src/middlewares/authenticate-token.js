@@ -7,7 +7,7 @@ const authenticateToken = (req, res, next) => {
   const refreshToken = req.cookies.refreshToken;
 
   if (!accessToken || !refreshToken) {
-    return res.status(401).json({ error: "Unauthorized. Please provide valid tokens." });
+    throw new ApiError(401, "Unauthorized. Please provide valid tokens.");
   }
 
   try {
@@ -21,7 +21,7 @@ const authenticateToken = (req, res, next) => {
     const message = error?.name === "TokenExpiredError"
       ? "Unauthorized. Token expired."
       : "Unauthorized. Please provide valid tokens.";
-    return res.status(401).json({ error: message });
+    throw new ApiError(401, message);
   }
 };
 
