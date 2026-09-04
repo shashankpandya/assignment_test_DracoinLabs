@@ -184,7 +184,7 @@ CREATE TABLE certificates(
     cert_id VARCHAR(66) NOT NULL UNIQUE,
     ipfs_cid VARCHAR(100) NOT NULL,
     is_pinned BOOLEAN NOT NULL DEFAULT false,
-    metadata_json JSONB NOT NULL,
+    metadata_json TEXT NOT NULL,
     metadata_hash VARCHAR(66) NOT NULL,
     recipient_address VARCHAR(42) NOT NULL,
     issuer_address VARCHAR(42) DEFAULT NULL,

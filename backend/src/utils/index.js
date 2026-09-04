@@ -16,6 +16,7 @@ const {
 } = require("./check-notice-permission");
 const { validateRequest } = require("./validate-request");
 const { formatMyPermission } = require("./format-my-permission");
+const { pinCertificateMetadata } = require("./pin-certificate-metadata");
 
 module.exports = {
     ApiError,
@@ -36,5 +37,6 @@ module.exports = {
     checkNoticeDeletePermission,
     checkNoticeRejectPermission,
     validateRequest,
-    formatMyPermission
+    formatMyPermission,
+    pinCertificateMetadata
 };
