@@ -136,8 +136,22 @@ VALUES
 ('Get role detail', '/api/v1/roles/:id', NULL, 'access_setting_parent', NULL, 'api', 'GET'),
 ('Get role permissions', '/api/v1/roles/:id/permissions', NULL, 'access_setting_parent', NULL, 'api', 'GET'),
 ('Add role permissions', '/api/v1/roles/:id/permissions', NULL, 'access_setting_parent', NULL, 'api', 'POST'),
-('Get role users', '/api/v1/roles/:id/users', NULL, 'access_setting_parent', NULL, 'api', 'GET')
+('Get role users', '/api/v1/roles/:id/users', NULL, 'access_setting_parent', NULL, 'api', 'GET'),
 -- end access setting
+
+-- start certificate
+('Certificates', 'certificates_parent', 'certificates.svg', NULL, 8, 'menu-screen', NULL),
+('Certificate List', 'certificates', NULL, 'certificates_parent', 1, 'menu-screen', NULL),
+('Issue Certificate', 'certificates/issue', NULL, 'certificates_parent', 2, 'menu-screen', NULL),
+('Verify Certificate', 'certificates/verify', NULL, 'certificates_parent', 3, 'menu-screen', NULL),
+('Get certificate students', '/api/v1/certificates/students', NULL, 'certificates_parent', NULL, 'api', 'GET'),
+('Get certificate metadata', '/api/v1/certificates/metadata/:cid', NULL, 'certificates_parent', NULL, 'api', 'GET'),
+('Get certificates', '/api/v1/certificates', NULL, 'certificates_parent', NULL, 'api', 'GET'),
+('Add new certificate', '/api/v1/certificates', NULL, 'certificates_parent', NULL, 'api', 'POST'),
+('Get certificate detail', '/api/v1/certificates/:id', NULL, 'certificates_parent', NULL, 'api', 'GET'),
+('Anchor certificate', '/api/v1/certificates/:id/anchor', NULL, 'certificates_parent', NULL, 'api', 'POST'),
+('Revoke certificate', '/api/v1/certificates/:id/revoke', NULL, 'certificates_parent', NULL, 'api', 'POST')
+-- end certificate
 ON CONFLICT DO NOTHING;
 
 ALTER SEQUENCE leave_status_id_seq RESTART WITH 1;
@@ -167,3 +181,16 @@ INSERT INTO user_profiles
 (user_id, gender, marital_status, phone,dob,join_dt,qualification,experience,current_address,permanent_address,father_name,mother_name,emergency_phone)
 VALUES
 ((SELECT currval('users_id_seq')),'Male','Married','4759746607','2024-08-05',NULL,NULL,NULL,NULL,NULL,'stut','lancy','79374304');
+
+-- Student (role_id 3) read-only access to the certificate feature.
+-- Admin (role_id 1) needs no rows here: checkApiAccess and getMyAccessControl both
+-- short-circuit on roleId === 1. Ids are resolved by (path, method) rather than
+-- hardcoded, because access_controls_id_seq is never reset and drifts on a re-run.
+INSERT INTO permissions (role_id, access_control_id, type)
+SELECT 3, ac.id, ac.type
+FROM access_controls ac
+WHERE ac.path IN ('certificates_parent', 'certificates', 'certificates/verify')
+   OR (ac.path = '/api/v1/certificates' AND ac.method = 'GET')
+   OR (ac.path = '/api/v1/certificates/:id' AND ac.method = 'GET')
+   OR (ac.path = '/api/v1/certificates/metadata/:cid' AND ac.method = 'GET')
+ON CONFLICT (role_id, access_control_id) DO NOTHING;
