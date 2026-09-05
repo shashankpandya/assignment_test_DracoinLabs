@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserProvider, id as keccakId } from 'ethers';
 
-import { CHAIN_ID, getRegistryContract } from '../util/certificate-registry';
+import { CHAIN_ID, getRegistryContract } from '../util';
 
 const ISSUER_ROLE = keccakId('ISSUER_ROLE');
 
