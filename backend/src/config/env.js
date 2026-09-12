@@ -1,4 +1,7 @@
 
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+
 const env = {
   PORT: process.env.PORT,
   DATABASE_URL: process.env.DATABASE_URL,
@@ -18,6 +21,8 @@ const env = {
   API_URL: process.env.API_URL,
   COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
+  PINATA_JWT: process.env.PINATA_JWT,
+  IPFS_GATEWAY_URL: process.env.IPFS_GATEWAY_URL,
 };
 
 module.exports = { env };

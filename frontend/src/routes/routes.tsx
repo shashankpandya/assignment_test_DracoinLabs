@@ -22,6 +22,11 @@ import { AddStaff, EditStaff, ListStaffs, ViewStaff } from '@/domains/staff/page
 import { AccountPage } from '@/domains/account/pages';
 import { EditSectionPage, ListSectionPage } from '@/domains/section/pages';
 import { EditDepartmentPage, ListDepartmentsPage } from '@/domains/department/pages';
+import {
+  IssueCertificatePage,
+  ListCertificatesPage,
+  VerifyCertificatePage
+} from '@/domains/certificate/pages';
 import { ErrorPage, NotFound } from '@/components/errors';
 import { MainLayout } from '@/components/layout';
 import { RoleAndPermission } from '@/domains/role-and-permission/pages';
@@ -83,6 +88,9 @@ export const routes = [
       { path: 'departments/edit/:id', element: <EditDepartmentPage /> },
       { path: 'notices/recipients', element: <ListNoticeRecipients /> },
       { path: 'notices/recipients/edit/:id', element: <EditNoticeRecipientPage /> },
+      { path: 'certificates', element: <ListCertificatesPage /> },
+      { path: 'certificates/issue', element: <IssueCertificatePage /> },
+      { path: 'certificates/verify', element: <VerifyCertificatePage /> },
       { path: '*', element: <NotFound /> }
     ]
   },

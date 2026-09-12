@@ -10,31 +10,19 @@ const authenticateToken = (req, res, next) => {
     throw new ApiError(401, "Unauthorized. Please provide valid tokens.");
   }
 
-  jwt.verify(accessToken, env.JWT_ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      throw new ApiError(
-        401,
-        "Unauthorized. Please provide valid access token."
-      );
-    }
+  try {
+    const user = jwt.verify(accessToken, env.JWT_ACCESS_TOKEN_SECRET);
+    const decodedRefreshToken = jwt.verify(refreshToken, env.JWT_REFRESH_TOKEN_SECRET);
 
-    jwt.verify(
-      refreshToken,
-      env.JWT_REFRESH_TOKEN_SECRET,
-      (err, refreshToken) => {
-        if (err) {
-          throw new ApiError(
-            401,
-            "Unauthorized. Please provide valid refresh token."
-          );
-        }
-
-        req.user = user;
-        req.refreshToken = refreshToken;
-        next();
-      }
-    );
-  });
+    req.user = user;
+    req.refreshToken = decodedRefreshToken;
+    return next();
+  } catch (error) {
+    const message = error?.name === "TokenExpiredError"
+      ? "Unauthorized. Token expired."
+      : "Unauthorized. Please provide valid tokens.";
+    throw new ApiError(401, message);
+  }
 };
 
 module.exports = { authenticateToken };

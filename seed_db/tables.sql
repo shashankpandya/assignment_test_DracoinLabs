@@ -174,6 +174,30 @@ CREATE TABLE user_leave_policy (
     UNIQUE (user_id, leave_policy_id)
 );
 
+CREATE TABLE certificates(
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER REFERENCES users(id) NOT NULL,
+    issuer_id INTEGER REFERENCES users(id) DEFAULT NULL,
+    title VARCHAR(100) NOT NULL,
+    description VARCHAR(400) DEFAULT NULL,
+    issued_dt DATE NOT NULL,
+    cert_id VARCHAR(66) NOT NULL UNIQUE,
+    ipfs_cid VARCHAR(100) NOT NULL,
+    is_pinned BOOLEAN NOT NULL DEFAULT false,
+    metadata_json TEXT NOT NULL,
+    metadata_hash VARCHAR(66) NOT NULL,
+    recipient_address VARCHAR(42) NOT NULL,
+    issuer_address VARCHAR(42) DEFAULT NULL,
+    chain_id INTEGER DEFAULT NULL,
+    contract_address VARCHAR(42) DEFAULT NULL,
+    tx_hash VARCHAR(66) DEFAULT NULL,
+    block_number INTEGER DEFAULT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    revoked_dt TIMESTAMP DEFAULT NULL,
+    created_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_dt TIMESTAMP DEFAULT NULL
+);
+
 
 -- functions
 DROP FUNCTION IF EXISTS staff_add_update(JSONB);
